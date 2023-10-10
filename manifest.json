@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "動畫瘋閉嘴",
+  "version": "0.1",
+
+  "description": "An extension to mute and wait for animation crazy's ADs. 一個不用聽到詐騙廣告的瀏覽器擴充。",
+
+  "permissions": ["activeTab"],
+
+  "content_scripts": [
+    {
+      "matches": ["https://ani.gamer.com.tw/animeVideo.php?sn=*"],
+      "js": ["main.js"]
+    }
+  ],
+
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  },
+
+  "host_permissions": ["https://ani.gamer.com.tw/animeVideo.php?sn=*"]
+}
