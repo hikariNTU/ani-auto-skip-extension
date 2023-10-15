@@ -1,3 +1,6 @@
+![Static Badge](https://img.shields.io/badge/Extension%20Manifest-v3-blue)
+![Static Badge](https://img.shields.io/badge/Typescript-JS%20Doc-green)
+
 # ani-auto-skip-extension 閉嘴動畫瘋
 
 An extension to mute and wait for animation crazy's ADs
