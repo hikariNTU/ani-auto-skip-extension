@@ -3,7 +3,6 @@ const skipQuery = ".nativeAD-skip-button";
 const acceptQuery = "#adult";
 const videoElementQuery = "#ani_video_html5_api";
 
-// @ts-expect-error
 if (typeof browser === "undefined") {
   /** @global */
   var browser = chrome;
@@ -11,15 +10,18 @@ if (typeof browser === "undefined") {
 }
 
 async function main() {
-  const acceptBtn = await waitFor(acceptQuery);
+  const acceptBtn = /** @type {HTMLButtonElement} */ (
+    await waitFor(acceptQuery)
+  );
   log("Click the button: ", acceptBtn);
   acceptBtn.click();
 
   log("Mute the page");
   mute();
 
-  /** @type {HTMLVideoElement} */
-  const videoPlayer = await waitFor(videoElementQuery, { timeout: 1000 });
+  const videoPlayer = /** @type {HTMLVideoElement} */ (
+    await waitFor(videoElementQuery, { timeout: 1000 })
+  );
 
   log("Video Player Status: ", videoPlayer, "Paused? ", videoPlayer?.paused);
 
@@ -33,10 +35,17 @@ async function main() {
 
   // If not, try to click skip button and pause the main video afterward
   try {
-    const skipButton = await waitFor(skipQuery, {
-      include: "點此跳過廣告",
-      timeout: 10000,
-    });
+    const skipButton = /**@type {HTMLButtonElement} */ (
+      await Promise.any([
+        waitFor("button.videoAdUiSkipButton", {
+          timeout: 10000,
+        }),
+        waitFor(skipQuery, {
+          include: "點此跳過廣告",
+          timeout: 10000,
+        }),
+      ])
+    );
     log("Try Click Skip:", skipButton.innerText);
     skipButton.click();
     log("Wait for 2 seconds to pause the playing anime");
@@ -69,6 +78,9 @@ function addUnmuteBtn() {
   const unmuteBtn = document.createElement("button");
   unmuteBtn.id = "unmute-btn";
   const s = unmuteBtn.style;
+  s.display = "flex";
+  s.alignItems = "center";
+  s.gap = "0.25em";
   s.padding = "4px 10px";
   s.fontSize = "2rem";
   s.position = "fixed";
@@ -82,7 +94,9 @@ function addUnmuteBtn() {
   s.border = "none";
   s.borderRadius = "4px";
   s.cursor = "pointer";
-  unmuteBtn.innerText = "取 消 靜 音";
+  unmuteBtn.innerHTML = `<img width="16" height="16" src="${browser.runtime.getURL(
+    "/images/speaker-off.svg"
+  )}" alt="" />取消靜音`;
   unmuteBtn.addEventListener("click", unmute);
 
   const logo = document.querySelector("div.logo");
@@ -98,44 +112,49 @@ function removeUnmuteBtn() {
 }
 
 // Utils
-
+/**
+ * @param {RegExp|string=} include
+ */
 function getElement(selector = "", include = "") {
   for (let node of document.querySelectorAll(selector)) {
-    if (!include || node.textContent?.includes(include)) {
+    if (
+      !include ||
+      (include instanceof RegExp
+        ? include.test(node.textContent || "")
+        : node.innerHTML.includes(include))
+    ) {
       return node;
     }
   }
 }
 
-function waitFor(
-  /** @type {string} */ selector,
-  { timeout = 40000, include = "" } = {}
-) {
+/**
+ * Busy wait until element found or timeout
+ * @param {string} selector
+ * @param {Object} options
+ * @param {number=} [options.timeout=40000] timeout ms
+ * @param {RegExp|string=} [options.include] Partial string or RegExp
+ * @returns {Promise<Element>}
+ */
+function waitFor(selector, { timeout = 40000, include = "" } = {}) {
   return new Promise((res, rej) => {
-    const firstTry = getElement(selector, include);
-    if (firstTry) {
-      res(firstTry);
-    }
-
-    const obs = new MutationObserver((mutations) => {
+    const intTime = setInterval(() => {
       const el = getElement(selector, include);
       if (el) {
-        obs.disconnect();
-        clearTimeout(timer);
+        clear();
         res(el);
       }
-      return;
-    });
+    }, 500);
 
     const timer = setTimeout(() => {
+      clear();
       rej("[Timeout] " + selector);
-      obs.disconnect();
     }, timeout);
 
-    obs.observe(document, {
-      childList: true,
-      subtree: true,
-    });
+    const clear = () => {
+      clearInterval(intTime);
+      clearTimeout(timer);
+    };
   });
 }
 

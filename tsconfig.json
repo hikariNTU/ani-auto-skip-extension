@@ -1,0 +1,10 @@
+{
+  "files": ["main.js", "service_worker.js"],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext", "DOM.Iterable"]
+  }
+}
