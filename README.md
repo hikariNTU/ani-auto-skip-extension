@@ -15,7 +15,7 @@ This extension will:
   靜音分頁並加上一個"取消靜音"的按鈕在網頁上方
 - After 30 seconds, try click those skip ad buttons  
   三十秒後嘗試點擊跳過廣告的按鈕
-- Restore the volume and stop video from playing
+- Restore the volume and stop video from playing  
   恢復頁面聲音並且暫停播放  
 
 ## Installation
