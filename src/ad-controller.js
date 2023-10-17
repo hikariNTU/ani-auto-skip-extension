@@ -20,4 +20,4 @@ window.addEventListener(
   false
 );
 
-console.log("[Loaded]", location.href);
+console.log("[Iframe controller Loaded]", location.href);

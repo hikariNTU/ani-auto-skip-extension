@@ -14,9 +14,9 @@ if (typeof browser === "undefined") {
   globalThis.browser = chrome;
 }
 
-async function dispatchGoogleAdClick() {
+async function dispatchGoogleAdClick(seconds = 20) {
   let i = 0;
-  while (i < 10) {
+  while (i < seconds) {
     i += 1;
     for (let frame of document.querySelectorAll("iframe")) {
       if (frame.src.startsWith("https://imasdk.googleapis.com")) {
@@ -25,7 +25,7 @@ async function dispatchGoogleAdClick() {
         });
       }
     }
-    await sleep(2000);
+    await sleep(1000);
   }
 }
 
@@ -135,9 +135,9 @@ function waitFor(selector, { timeout = 40000, include = "" } = {}) {
   return new Promise((res, rej) => {
     const intTime = setInterval(() => {
       const el = getElement(selector, include);
-      log("Try find: ", selector);
+      // log("Try find: ", selector);
       if (el) {
-        log("Found: ", selector, el);
+        // log("Found: ", selector, el);
         clear();
         res(el);
       }
@@ -166,7 +166,9 @@ function log(...args) {
 
 function addUnmuteBtn() {
   const unmuteBtn = document.createElement("button");
+
   unmuteBtn.id = "unmute-btn";
+
   const s = unmuteBtn.style;
   s.display = "flex";
   s.alignItems = "center";
@@ -189,12 +191,7 @@ function addUnmuteBtn() {
   )}" alt="" />取消靜音`;
   unmuteBtn.addEventListener("click", unmute);
 
-  const logo = document.querySelector("div.logo");
-  if (logo) {
-    logo?.insertAdjacentElement("afterend", unmuteBtn);
-  } else {
-    document.body.appendChild(unmuteBtn);
-  }
+  document.body.appendChild(unmuteBtn);
 }
 
 function removeUnmuteBtn() {
