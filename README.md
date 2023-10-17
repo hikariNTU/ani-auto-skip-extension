@@ -6,6 +6,8 @@
 An extension to mute and wait for animation crazy's ADs  
 再也不用看動畫瘋聽到詐騙廣告。
 
+## Description
+
 This extension will:  
 這個擴充功能會：
 
@@ -13,6 +15,8 @@ This extension will:
   自動點擊同意按鈕
 - Mute the tab and show an unmute button on top of the page  
   靜音分頁並加上一個"取消靜音"的按鈕在網頁上方
+- Try skip AD inside Google ADs  
+  嘗試略過 Google AD 的廣告 (Skip AD)
 - After 30 seconds, try click those skip ad buttons  
   三十秒後嘗試點擊跳過廣告的按鈕
 - Restore the volume and stop video from playing  
@@ -20,15 +24,8 @@ This extension will:
 
 ## Installation
 
-Load unpack development package > choose this directory  
-在開發者人員模式中載入未封裝的擴充功能
-
-You can delete other files expect following:  
-可以只留以下幾個文件：
-
-- main.js
-- manifest.json
-- service_worker.js
+Load unpack development package > choose `/src` directory  
+在開發者人員模式中載入未封裝的擴充功能，並選擇 `/src` 資料夾
 
 ## Support
 

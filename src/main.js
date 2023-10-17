@@ -3,10 +3,30 @@ const skipQuery = ".nativeAD-skip-button";
 const acceptQuery = "#adult";
 const videoElementQuery = "#ani_video_html5_api";
 
+/**
+ * Google Ad Iframe example
+ * https://imasdk.googleapis.com/js/core/bridge3.595.0_en.html#goog_2096627656
+ */
+
 if (typeof browser === "undefined") {
   /** @global */
   var browser = chrome;
   globalThis.browser = chrome;
+}
+
+async function dispatchGoogleAdClick() {
+  let i = 0;
+  while (i < 10) {
+    i += 1;
+    for (let frame of document.querySelectorAll("iframe")) {
+      if (frame.src.startsWith("https://imasdk.googleapis.com")) {
+        frame.contentWindow.postMessage(`[aniskip]: try ${i}`, {
+          targetOrigin: "*",
+        });
+      }
+    }
+    await sleep(2000);
+  }
 }
 
 async function main() {
@@ -22,13 +42,23 @@ async function main() {
   const videoPlayer = /** @type {HTMLVideoElement} */ (
     await waitFor(videoElementQuery, { timeout: 1000 })
   );
-
-  log("Video Player Status: ", videoPlayer, "Paused? ", videoPlayer?.paused);
-
   const prevTime = videoPlayer.currentTime;
+
+  log(
+    "Video Player Status: ",
+    videoPlayer,
+    "Paused? ",
+    videoPlayer?.paused,
+    ", start time: ",
+    prevTime
+  );
+
+  // notify google ad iframe to try click the skip ad button
+  dispatchGoogleAdClick();
 
   // Wait 30 sec and see if user already dismiss unmute button (start watching)
   await sleep(30000);
+
   if (!document.getElementById("unmute-btn")) {
     return;
   }
@@ -36,15 +66,10 @@ async function main() {
   // If not, try to click skip button and pause the main video afterward
   try {
     const skipButton = /**@type {HTMLButtonElement} */ (
-      await Promise.any([
-        waitFor("button.videoAdUiSkipButton", {
-          timeout: 10000,
-        }),
-        waitFor(skipQuery, {
-          include: "點此跳過廣告",
-          timeout: 10000,
-        }),
-      ])
+      await waitFor(skipQuery, {
+        include: "點此跳過廣告",
+        timeout: 10000,
+      })
     );
     log("Try Click Skip:", skipButton.innerText);
     skipButton.click();
@@ -72,6 +97,71 @@ function mute() {
 function unmute() {
   browser.runtime.sendMessage("unmute");
   removeUnmuteBtn();
+}
+
+// Utils
+/**
+ * @param {RegExp|string=} include
+ */
+function getElement(selector = "", include = "", includeIframe = false) {
+  const documents = includeIframe
+    ? [...document.querySelectorAll("iframe")].map(
+        (iframe) => iframe.contentDocument
+      )
+    : [document];
+  for (let doc of documents) {
+    for (let node of doc.querySelectorAll(selector)) {
+      if (
+        !include ||
+        (include instanceof RegExp
+          ? include.test(node.textContent || "")
+          : node.innerHTML.includes(include))
+      ) {
+        return node;
+      }
+    }
+  }
+}
+
+/**
+ * Busy wait until element found or timeout
+ * @param {string} selector
+ * @param {Object} options
+ * @param {number=} [options.timeout=40000] timeout ms
+ * @param {RegExp|string=} [options.include] Partial string or RegExp
+ * @returns {Promise<Element>}
+ */
+function waitFor(selector, { timeout = 40000, include = "" } = {}) {
+  return new Promise((res, rej) => {
+    const intTime = setInterval(() => {
+      const el = getElement(selector, include);
+      log("Try find: ", selector);
+      if (el) {
+        log("Found: ", selector, el);
+        clear();
+        res(el);
+      }
+    }, 500);
+
+    const timer = setTimeout(() => {
+      clear();
+      rej("[Timeout] " + selector);
+    }, timeout);
+
+    const clear = () => {
+      clearInterval(intTime);
+      clearTimeout(timer);
+    };
+  });
+}
+
+async function sleep(ms = 0) {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
+/** @type {Console["log"]} */
+function log(...args) {
+  console.log("[Ani Skip] ", ...args);
 }
 
 function addUnmuteBtn() {
@@ -109,60 +199,4 @@ function addUnmuteBtn() {
 
 function removeUnmuteBtn() {
   document.getElementById("unmute-btn")?.remove();
-}
-
-// Utils
-/**
- * @param {RegExp|string=} include
- */
-function getElement(selector = "", include = "") {
-  for (let node of document.querySelectorAll(selector)) {
-    if (
-      !include ||
-      (include instanceof RegExp
-        ? include.test(node.textContent || "")
-        : node.innerHTML.includes(include))
-    ) {
-      return node;
-    }
-  }
-}
-
-/**
- * Busy wait until element found or timeout
- * @param {string} selector
- * @param {Object} options
- * @param {number=} [options.timeout=40000] timeout ms
- * @param {RegExp|string=} [options.include] Partial string or RegExp
- * @returns {Promise<Element>}
- */
-function waitFor(selector, { timeout = 40000, include = "" } = {}) {
-  return new Promise((res, rej) => {
-    const intTime = setInterval(() => {
-      const el = getElement(selector, include);
-      if (el) {
-        clear();
-        res(el);
-      }
-    }, 500);
-
-    const timer = setTimeout(() => {
-      clear();
-      rej("[Timeout] " + selector);
-    }, timeout);
-
-    const clear = () => {
-      clearInterval(intTime);
-      clearTimeout(timer);
-    };
-  });
-}
-
-async function sleep(ms = 0) {
-  return new Promise((res) => setTimeout(res, ms));
-}
-
-/** @type {Console["log"]} */
-function log(...args) {
-  console.log("[Ani Skip] ", ...args);
 }

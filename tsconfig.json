@@ -1,5 +1,5 @@
 {
-  "files": ["main.js", "service_worker.js"],
+  "files": ["src/main.js", "src/service_worker.js", "src/ad-controller.js"],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
