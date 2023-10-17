@@ -3,6 +3,8 @@
 
 # ani-auto-skip-extension 閉嘴動畫瘋
 
+![Ani Skip Icon](./src/images/ani_skip_icon_128.png)
+
 An extension to mute and wait for animation crazy's ADs  
 再也不用看動畫瘋聽到詐騙廣告。
 
