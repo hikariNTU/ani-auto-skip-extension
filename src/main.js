@@ -6,6 +6,7 @@ const videoElementQuery = "#ani_video_html5_api";
 /**
  * Google Ad Iframe example
  * https://imasdk.googleapis.com/js/core/bridge3.595.0_en.html#goog_2096627656
+ * https://de3207840d8a56f2d4a2b4d89f1ddfcf.safeframe.googlesyndication.com/safeframe/1-0-40/html/container.html
  */
 
 if (typeof browser === "undefined") {
@@ -19,7 +20,10 @@ async function dispatchGoogleAdClick(seconds = 20) {
   while (i < seconds) {
     i += 1;
     for (let frame of document.querySelectorAll("iframe")) {
-      if (frame.src.startsWith("https://imasdk.googleapis.com")) {
+      if (
+        frame.src.startsWith("https://imasdk.googleapis.com") ||
+        frame.src.includes("googlesyndication.com")
+      ) {
         frame.contentWindow.postMessage(`[aniskip]: try ${i}`, {
           targetOrigin: "*",
         });
