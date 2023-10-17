@@ -180,6 +180,7 @@ function addUnmuteBtn() {
   s.padding = "4px 10px";
   s.fontSize = "2rem";
   s.position = "fixed";
+  s.zIndex = "999999999";
   s.top = "10px";
   s.left = "50%";
   s.transform = "translateX(-50%)";
