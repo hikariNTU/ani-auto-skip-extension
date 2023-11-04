@@ -8,7 +8,7 @@ window.addEventListener(
     ) {
       return;
     }
-    console.log('[Iframe]', event.data);
+    console.log("[Iframe]", event.data);
     /**@type {HTMLButtonElement | undefined} */ (
       document.querySelector("button.videoAdUiSkipButton")
     )?.click();

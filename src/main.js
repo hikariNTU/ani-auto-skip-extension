@@ -82,6 +82,9 @@ async function main() {
   } catch (e) {
     console.error(e);
     log("No skip button found");
+    if (!document.getElementById("unmute-btn")) {
+      return;
+    }
     log("Try restoring the starting time");
     videoPlayer.currentTime = prevTime;
   }
