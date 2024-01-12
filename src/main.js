@@ -205,3 +205,8 @@ function addUnmuteBtn() {
 function removeUnmuteBtn() {
   document.getElementById("unmute-btn")?.remove();
 }
+
+// Make sure page navigation will release the muted state!
+window.addEventListener("beforeunload", () => {
+  unmute();
+});
