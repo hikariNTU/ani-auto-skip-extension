@@ -27,7 +27,13 @@ window.addEventListener("beforeunload", () => {
 async function addMagicButton() {
   log("Try add BUTTON");
   const id = "🚀SKIP";
-  const container = await waitFor(".ncc-choose-btn");
+  /** @type {Element} */
+  let container;
+  try {
+    container = await waitFor(".ncc-choose-btn", { timeout: 3000 });
+  } catch {
+    return;
+  }
   if (document.getElementById(id)) {
     return;
   }
@@ -124,12 +130,12 @@ async function dispatchGoogleAdClick(seconds = 20) {
 
 function mute() {
   // Only background script can mute tab
-  browser.runtime.sendMessage("mute");
+  browser.runtime?.sendMessage("mute");
   addUnmuteBtn();
 }
 
 function unmute() {
-  browser.runtime.sendMessage("unmute");
+  browser.runtime?.sendMessage("unmute");
   removeUnmuteBtn();
 }
 
