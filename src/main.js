@@ -16,14 +16,24 @@ if (typeof browser === "undefined") {
 }
 
 window.addEventListener("load", addMagicButton);
+// @ts-expect-error navigation api only work in chromium
+window.navigation?.addEventListener("navigate", addMagicButton);
+
 // Make sure page navigation will release the muted state!
 window.addEventListener("beforeunload", () => {
   unmute();
 });
 
 async function addMagicButton() {
+  log("Try add BUTTON");
+  const id = "🚀SKIP";
   const container = await waitFor(".ncc-choose-btn");
+  if (document.getElementById(id)) {
+    return;
+  }
   const btn = document.createElement("button");
+  btn.id = id;
+  btn.style.textWrap = "nowrap";
   btn.innerText = "🚀SKIP";
   btn.className = "choose-btn-agree";
   btn.addEventListener("click", () => {
