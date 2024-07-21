@@ -15,25 +15,25 @@ if (typeof browser === "undefined") {
   globalThis.browser = chrome;
 }
 
-async function dispatchGoogleAdClick(seconds = 20) {
-  let i = 0;
-  while (i < seconds) {
-    i += 1;
-    for (let frame of document.querySelectorAll("iframe")) {
-      if (
-        frame.src.startsWith("https://imasdk.googleapis.com") ||
-        frame.src.includes("googlesyndication.com")
-      ) {
-        frame.contentWindow.postMessage(`[aniskip]: try ${i}`, {
-          targetOrigin: "*",
-        });
-      }
-    }
-    await sleep(1000);
-  }
+window.addEventListener("load", addMagicButton);
+// Make sure page navigation will release the muted state!
+window.addEventListener("beforeunload", () => {
+  unmute();
+});
+
+async function addMagicButton() {
+  const container = await waitFor(".ncc-choose-btn");
+  const btn = document.createElement("button");
+  btn.innerText = "🚀SKIP";
+  btn.className = "choose-btn-agree";
+  btn.addEventListener("click", () => {
+    muteAndSkipAd();
+  });
+  container.removeChild(container.lastChild);
+  container.append(btn);
 }
 
-async function main() {
+async function muteAndSkipAd() {
   const acceptBtn = /** @type {HTMLButtonElement} */ (
     await waitFor(acceptQuery)
   );
@@ -93,7 +93,24 @@ async function main() {
   videoPlayer.pause();
   unmute();
 }
-window.addEventListener("load", main);
+
+async function dispatchGoogleAdClick(seconds = 20) {
+  let i = 0;
+  while (i < seconds) {
+    i += 1;
+    for (let frame of document.querySelectorAll("iframe")) {
+      if (
+        frame.src.startsWith("https://imasdk.googleapis.com") ||
+        frame.src.includes("googlesyndication.com")
+      ) {
+        frame.contentWindow.postMessage(`[aniskip]: try ${i}`, {
+          targetOrigin: "*",
+        });
+      }
+    }
+    await sleep(1000);
+  }
+}
 
 function mute() {
   // Only background script can mute tab
@@ -205,8 +222,3 @@ function addUnmuteBtn() {
 function removeUnmuteBtn() {
   document.getElementById("unmute-btn")?.remove();
 }
-
-// Make sure page navigation will release the muted state!
-window.addEventListener("beforeunload", () => {
-  unmute();
-});

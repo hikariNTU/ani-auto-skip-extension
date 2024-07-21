@@ -1,3 +1,18 @@
+// @ts-check
+
+/**
+ * @param {string} q
+ */
+function click(q) {
+  const btn = /**@type {HTMLButtonElement | undefined} */ (
+    document.querySelector(q)
+  );
+  if (btn) {
+    btn.click();
+    console.log("[iframe]: Button ", q, "Founded!");
+  }
+}
+
 window.addEventListener(
   "message",
   (event) => {
@@ -8,14 +23,11 @@ window.addEventListener(
     ) {
       return;
     }
-    console.log("[Iframe]", event.data);
-    /**@type {HTMLButtonElement | undefined} */ (
-      document.querySelector("button.videoAdUiSkipButton")
-    )?.click();
-
-    /**@type {HTMLButtonElement | undefined} */ (
-      document.querySelector("div.rewardCloseButton")
-    )?.click();
+    // console.log("[Iframe]", event.data);
+    click("button.videoAdUiSkipButton");
+    click("div.rewardCloseButton");
+    click("#count_down");
+    click("#close_video_button");
   },
   false
 );
