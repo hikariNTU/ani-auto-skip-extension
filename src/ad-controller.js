@@ -28,6 +28,7 @@ window.addEventListener(
     click("div.rewardCloseButton");
     click("#count_down");
     click("#close_video_button");
+    click("#dismiss-button-element"); // white modal google ad with translucent backdrop
   },
   false
 );

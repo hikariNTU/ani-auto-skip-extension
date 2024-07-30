@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "動畫瘋閉嘴",
-  "version": "0.3.2",
+  "version": "0.3.3",
 
   "description": "An extension to mute and wait for animation crazy's ADs. 自動跳過並靜音動畫瘋廣告。",
 
