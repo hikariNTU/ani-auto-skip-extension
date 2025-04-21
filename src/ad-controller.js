@@ -29,6 +29,7 @@ window.addEventListener(
     click("#count_down");
     click("#close_video_button");
     click("#dismiss-button-element"); // white modal google ad with translucent backdrop
+    click("#dismiss-button"); // white modal google ad with translucent backdrop v2?
   },
   false
 );
