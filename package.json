@@ -1,4 +1,10 @@
 {
+  "version": "0.3.6",
+  "scripts": {
+    "bump": "node ./scripts/bump.js",
+    "pack:windows": "powershell Compress-Archive -Path ./src/* -DestinationPath src.zip -Force",
+    "pack:linux": "zip -r src.zip ./src"
+  },
   "devDependencies": {
     "@types/chrome": "^0.0.268"
   }
