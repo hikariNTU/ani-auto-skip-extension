@@ -1,6 +1,4 @@
 node_modules
 dist
-# I don't really care types
-package-lock.json
 *.zip
 .DS_Store
