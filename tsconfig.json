@@ -1,10 +1,15 @@
 {
-  "files": ["src/main.js", "src/service_worker.js", "src/ad-controller.js"],
+  "include": ["src/**/*.ts"],
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "noEmit": true,
     "target": "ESNext",
-    "lib": ["DOM", "ESNext", "DOM.Iterable"]
+    "lib": ["DOM", "ESNext", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["chrome"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true
   }
 }

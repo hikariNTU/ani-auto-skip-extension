@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <title>動畫瘋閉嘴 設定</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        width: 300px;
+        font-family: system-ui, -apple-system, "PingFang TC",
+          "Microsoft JhengHei", sans-serif;
+        font-size: 14px;
+        background: light-dark(#fafafa, #1e1e1e);
+        color: light-dark(#222, #eee);
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: #00b1ad;
+        color: #fff;
+        font-weight: bold;
+        font-size: 15px;
+      }
+      header img {
+        width: 24px;
+        height: 24px;
+      }
+      main {
+        padding: 8px 16px 14px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 9px 0;
+        border-bottom: 1px solid light-dark(#e5e5e5, #333);
+      }
+      .row:last-child {
+        border-bottom: none;
+      }
+      .label {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .label small {
+        color: light-dark(#888, #999);
+        font-size: 11px;
+      }
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #00b1ad;
+        flex: none;
+      }
+      input[type="number"] {
+        width: 60px;
+        padding: 4px 6px;
+        border: 1px solid light-dark(#ccc, #555);
+        border-radius: 4px;
+        background: light-dark(#fff, #2a2a2a);
+        color: inherit;
+      }
+      input[type="range"] {
+        width: 110px;
+        accent-color: #00b1ad;
+      }
+      .volume-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      button#test-chime {
+        padding: 3px 8px;
+        border: 1px solid light-dark(#ccc, #555);
+        border-radius: 4px;
+        background: light-dark(#fff, #2a2a2a);
+        color: inherit;
+        cursor: pointer;
+      }
+      button#test-chime:hover {
+        background: light-dark(#f0f0f0, #383838);
+      }
+      footer {
+        padding: 6px 16px 10px;
+        font-size: 11px;
+        color: light-dark(#999, #777);
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="images/ani_skip_icon_64.png" alt="" />
+      動畫瘋閉嘴 設定
+    </header>
+    <main>
+      <label class="row">
+        <span class="label">
+          自動靜音廣告
+          <small>Mute the tab while ads play</small>
+        </span>
+        <input type="checkbox" id="autoMute" />
+      </label>
+      <label class="row">
+        <span class="label">
+          跳過後暫停影片
+          <small>Pause the anime after skipping</small>
+        </span>
+        <input type="checkbox" id="pauseAfterSkip" />
+      </label>
+      <label class="row">
+        <span class="label">
+          強制跳過等待秒數
+          <small>Seconds before force-skip</small>
+        </span>
+        <input type="number" id="waitSeconds" min="5" max="120" step="5" />
+      </label>
+      <label class="row">
+        <span class="label">
+          廣告結束提示音
+          <small>Chime when ads are done</small>
+        </span>
+        <input type="checkbox" id="chimeOnReady" />
+      </label>
+      <label class="row">
+        <span class="label">
+          動畫播畢提示音
+          <small>Chime when the episode ends</small>
+        </span>
+        <input type="checkbox" id="chimeOnEnded" />
+      </label>
+      <div class="row">
+        <span class="label">
+          提示音音量
+          <small>Chime volume</small>
+        </span>
+        <span class="volume-group">
+          <input type="range" id="chimeVolume" min="0" max="1" step="0.05" />
+          <button id="test-chime" title="試聽">▶</button>
+        </span>
+      </div>
+      <label class="row">
+        <span class="label">
+          桌面通知
+          <small>Desktop notification when done</small>
+        </span>
+        <input type="checkbox" id="notifyOnReady" />
+      </label>
+    </main>
+    <footer id="version"></footer>
+    <script type="module" src="popup.ts"></script>
+  </body>
+</html>

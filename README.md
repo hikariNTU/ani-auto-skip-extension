@@ -1,5 +1,6 @@
 ![Static Badge](https://img.shields.io/badge/Extension%20Manifest-v3-blue)
-![Static Badge](https://img.shields.io/badge/Typescript-JS%20Doc-green)
+![Static Badge](https://img.shields.io/badge/Typescript-7.0.2-green)
+![Static Badge](https://img.shields.io/badge/Vite-8-red)
 
 # ani-auto-skip-extension 閉嘴動畫瘋
 
@@ -7,6 +8,8 @@
 
 An extension to mute and wait for animation crazy's ADs  
 自動靜音並點及跳過廣告按鈕
+
+https://chromewebstore.google.com/detail/%E5%8B%95%E7%95%AB%E7%98%8B%E9%96%89%E5%98%B4/kdipgoiohdigddmlpmohjdjfogmmmjfi
 
 ## Description
 
@@ -24,10 +27,35 @@ This extension will:
 - Restore the volume and stop video from playing  
   恢復頁面聲音並且暫停播放
 
+## Settings 設定
+
+Click the extension icon to open the settings popup:  
+點擊擴充功能圖示打開設定：
+
+- 自動靜音廣告 / Mute the tab while ads play
+- 跳過後暫停影片 / Pause the anime after skipping
+- 強制跳過等待秒數 / Seconds to wait before force-skip (default 30)
+- 廣告結束提示音 / Chime when ads are done
+- 動畫播畢提示音 / Chime when the episode ends
+- 提示音音量 / Chime volume (with test button)
+- 桌面通知 / Desktop notification when done
+
 ## Installation
 
-Load unpack development package > choose `/src` directory  
-在開發者人員模式中載入未封裝的擴充功能，並選擇 `/src` 資料夾
+This is a [Vite](https://vitejs.dev/) + [@crxjs/vite-plugin](https://crxjs.dev/) project. Source lives in `/src`; it's built into `/dist`, which is what Chrome loads.  
+這是一個使用 Vite + @crxjs/vite-plugin 建置的專案，原始碼在 `/src`，建置後輸出到 `/dist`，Chrome 載入的是 `/dist`。
+
+```bash
+npm install
+npm run build   # one-off build into /dist
+# or
+npm run dev     # watches src/ and auto-reloads the loaded extension
+```
+
+Load unpacked development package > choose the `/dist` directory  
+在開發者人員模式中載入未封裝的擴充功能，並選擇 `/dist` 資料夾
+
+While `npm run dev` is running, crxjs handles reloading the extension for you when files under `src/` change — no need to remove `/dist` or manually reload in `chrome://extensions`.
 
 ## AD Skip Coverage
 

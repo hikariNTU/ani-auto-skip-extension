@@ -1,36 +1,71 @@
 {
   "manifest_version": 3,
   "name": "動畫瘋閉嘴",
-  "version": "0.3.6",
+  "version": "0.5.0",
   "description": "An extension to mute and wait for animation crazy's ADs. 自動跳過並靜音動畫瘋廣告。",
-  "permissions": ["activeTab"],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "notifications"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "64": "images/ani_skip_icon_64.png",
+      "128": "images/ani_skip_icon_128.png"
+    }
+  },
   "icons": {
     "64": "images/ani_skip_icon_64.png",
     "128": "images/ani_skip_icon_128.png"
   },
   "content_scripts": [
     {
-      "matches": ["https://ani.gamer.com.tw/animeVideo.php?sn=*"],
-      "js": ["main.js"]
+      "matches": [
+        "https://ani.gamer.com.tw/animeVideo.php?sn=*"
+      ],
+      "js": [
+        "main.ts"
+      ]
     },
     {
       "matches": [
         "https://imasdk.googleapis.com/*",
         "https://*.safeframe.googlesyndication.com/*"
       ],
-      "js": ["ad-controller.js"],
+      "js": [
+        "ad-controller.ts"
+      ],
       "all_frames": true
+    },
+    {
+      "matches": [
+        "https://imasdk.googleapis.com/*",
+        "https://*.safeframe.googlesyndication.com/*"
+      ],
+      "js": [
+        "visibility-spoof.ts"
+      ],
+      "all_frames": true,
+      "run_at": "document_start",
+      "world": "MAIN"
     }
   ],
   "background": {
-    "service_worker": "service_worker.js",
+    "service_worker": "service_worker.ts",
     "type": "module"
   },
   "web_accessible_resources": [
     {
-      "resources": ["/images/*"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "/images/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
-  "host_permissions": ["https://ani.gamer.com.tw/animeVideo.php?sn=*"]
+  "host_permissions": [
+    "https://ani.gamer.com.tw/animeVideo.php?sn=*"
+  ]
 }
