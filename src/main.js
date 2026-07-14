@@ -40,7 +40,7 @@ async function addMagicButton() {
   const btn = document.createElement("button");
   btn.id = id;
   btn.style.textWrap = "nowrap";
-  btn.innerText = "🚀SKIP";
+  btn.innerText = "🚀🚀🚀";
   btn.className = "choose-btn-agree";
   btn.addEventListener("click", () => {
     muteAndSkipAd();
