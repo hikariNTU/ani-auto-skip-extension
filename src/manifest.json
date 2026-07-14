@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
   "name": "動畫瘋閉嘴",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "An extension to mute and wait for animation crazy's ADs. 自動跳過並靜音動畫瘋廣告。",
   "permissions": [
     "activeTab",
     "storage",
-    "notifications"
+    "notifications",
+    "debugger"
   ],
   "action": {
     "default_popup": "popup.html",
