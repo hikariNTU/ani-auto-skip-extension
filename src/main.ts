@@ -81,6 +81,13 @@ async function muteAndSkipAd() {
   // notify google ad iframe to try click the skip ad button
   dispatchGoogleAdClick();
 
+  // For ads that ignore synthetic clicks or live in unreachable sandboxed
+  // frames, ask the background to dispatch genuinely trusted clicks via CDP.
+  if (settings.cdpTrustedClick) {
+    log("Requesting CDP trusted-click sweep");
+    browser.runtime?.sendMessage({ type: "cdp-dismiss" });
+  }
+
   // Wait and see if user already dismiss unmute button (start watching)
   await sleep(settings.waitSeconds * 1000);
 
@@ -104,8 +111,14 @@ async function muteAndSkipAd() {
     if (userTookOver()) {
       return;
     }
-    log("Try restoring the starting time");
-    videoPlayer.currentTime = prevTime;
+    // Only restore if we captured a real position. On an inactive tab the anime
+    // hadn't started when we grabbed prevTime (so it's 0); by now the platform
+    // may have auto-advanced past the ad, and seeking to 0 would yank it back to
+    // the very beginning. Restoring to 0 is never useful, so skip it.
+    if (prevTime > 0) {
+      log("Try restoring the starting time", prevTime);
+      videoPlayer.currentTime = prevTime;
+    }
   }
 
   if (settings.pauseAfterSkip) {
@@ -244,6 +257,15 @@ async function sleep(ms = 0) {
 function log(...args: unknown[]) {
   console.log("[Ani Skip] ", ...args);
 }
+
+// CDP runs in the service worker, so its logs land in a separate console. Mirror
+// the status lines it forwards here so the page console shows whether (and which)
+// trusted-click path fired without opening the service worker's DevTools.
+browser.runtime?.onMessage?.addListener((message) => {
+  if (message && typeof message === "object" && message.type === "cdp-log") {
+    console.log("%c[Ani Skip CDP]", "color:#c026d3;font-weight:bold", message.text);
+  }
+});
 
 function addUnmuteBtn() {
   const unmuteBtn = document.createElement("button");

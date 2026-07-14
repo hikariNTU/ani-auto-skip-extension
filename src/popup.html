@@ -93,6 +93,35 @@
         color: light-dark(#999, #777);
         text-align: right;
       }
+      .targets {
+        padding: 8px 16px 12px;
+        border-top: 1px solid light-dark(#e5e5e5, #333);
+      }
+      .targets summary {
+        font-size: 11px;
+        color: light-dark(#888, #999);
+        cursor: pointer;
+      }
+      .targets table {
+        width: 100%;
+        margin-top: 6px;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+      .targets th {
+        text-align: left;
+        color: light-dark(#888, #999);
+        font-weight: normal;
+        padding: 2px 6px 2px 0;
+      }
+      .targets td {
+        padding: 2px 6px 2px 0;
+        vertical-align: top;
+      }
+      .targets td.selector {
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        word-break: break-all;
+      }
     </style>
   </head>
   <body>
@@ -153,7 +182,27 @@
         </span>
         <input type="checkbox" id="notifyOnReady" />
       </label>
+      <label class="row">
+        <span class="label">
+          強力關閉頑固廣告
+          <small>Force-close stubborn ads (uses debugger, shows banner)</small>
+        </span>
+        <input type="checkbox" id="cdpTrustedClick" />
+      </label>
     </main>
+    <details class="targets">
+      <summary>目前偵測目標 (Ad dismiss targets)</summary>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Selector</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody id="ad-targets"></tbody>
+      </table>
+    </details>
     <footer id="version"></footer>
     <script type="module" src="popup.ts"></script>
   </body>
